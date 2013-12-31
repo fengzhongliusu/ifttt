@@ -19,7 +19,7 @@ public abstract class Data {
 	
 
 	/**
-	 * 	get a database connection for read
+	 * sb	get a database connection for read
  	 * @return		
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
