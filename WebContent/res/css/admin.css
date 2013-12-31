@@ -1,0 +1,8 @@
+.divconetnt {
+	width: 350px;
+	height: 400px;
+	overflow-y: auto;
+	border: 2px solid #999;
+	-webkit-border-radius: 4px;
+	background-color: #f5f5f5;
+}

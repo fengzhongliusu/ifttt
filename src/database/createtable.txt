@@ -1,0 +1,155 @@
+//sql statements executed in mysql
+
+CREATE TABLE user 
+(
+		ID INT AUTO_INCREMENT,
+        username CHAR(30) NOT NULL UNIQUE, 
+        password CHAR(30) NOT NULL,
+        points INT ,--default 1000
+        experience INT, --default 0
+       	PRIMARY KEY(id)
+);
+
+
+CREATE TABLE task 
+(
+		taskID INT AUTO_INCREMENT,
+        userID INT,
+        triggerType INT,
+        actionType INT,
+        status INT,
+        description TEXT,
+        execInfo TEXT,
+        PRIMARY KEY(taskId)
+);
+
+ALTER TABLE `task`
+ADD CONSTRAINT `userid_cons`
+FOREIGN KEY (`userID`) 
+REFERENCES `user`(`ID`)
+
+CREATE TABLE message
+(
+	messageID INT AUTO_INCREMENT,
+	senderID INT,
+	recipientID INT,
+	deliveryTime CHAR(30),
+	content TEXT,
+	unread BOOLEAN,
+    PRIMARY KEY(ID)
+);
+
+ALTER TABLE `message`
+ADD CONSTRAINT `senderid_cons`
+FOREIGN KEY (`senderID`) 
+REFERENCES `user`(`ID`)
+
+ALTER TABLE `message`
+ADD CONSTRAINT `recipientid_cons`
+FOREIGN KEY (`recipientID`) 
+REFERENCES `user`(`ID`)
+
+
+
+/**
+	 * get the trigger type of a task
+	 * 
+	 * @param taskID
+	 *            the destination task id
+	 * @return the destination task trigger type( -1 when error )
+	 */
+	public static int getTaskTriggerType(int taskID) {
+
+		int triggerType = -1;
+		try {
+			Connection connection = getReadConnection();
+			String sqlString = "SELECT `triggertype` FROM `task` WHERE `taskID`=?";
+			PreparedStatement statement = connection
+					.prepareStatement(sqlString);
+			statement.setInt(1, taskID);
+			ResultSet result = statement.executeQuery();
+			result.last();
+			triggerType = result.getInt("triggerType");
+			connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return triggerType;
+	}
+
+	/**
+	 * get the action type of a task
+	 * 
+	 * @param taskID
+	 *            the destination task id
+	 * @return the destination task action type( -1 when error )
+	 */
+	public static int getTaskActionType(int taskID) {
+
+		int actionType = -1;
+		try {
+			Connection connection = getReadConnection();
+			String sqlString = "SELECT `actiontype` FROM `task` WHERE `taskID`=?";
+			PreparedStatement statement = connection
+					.prepareStatement(sqlString);
+			statement.setInt(1, taskID);
+			ResultSet result = statement.executeQuery();
+			result.last();
+			actionType = result.getInt("actionType");
+			connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return actionType;
+	}
+
+	/**
+	 * get status of a task
+	 * 
+	 * @param taskID
+	 *            taskID the destination task id
+	 * @return the destination task status ( -2 when error )
+	 */
+	public static int getTaskStatus(int taskID) {
+		int status = -2;
+		try {
+			Connection connection = getReadConnection();
+			String sqlString = "SELECT `status` FROM `task` WHERE `taskID`=?";
+			PreparedStatement statement = connection
+					.prepareStatement(sqlString);
+			statement.setInt(1, taskID);
+			ResultSet result = statement.executeQuery();
+			result.last();
+			status = result.getInt("status");
+			connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return status;
+	}
+
+	/**
+	 * get description of a task
+	 * 
+	 * @param taskID
+	 *            taskID the destination task id
+	 * @return the destination task description ( null when error )
+	 */
+	public static String getTaskDescription(int taskID) {
+		String description = null;
+		try {
+			Connection connection = getReadConnection();
+			String sqlString = "SELECT `description` FROM `task` WHERE `taskID`=?";
+			PreparedStatement statement = connection
+					.prepareStatement(sqlString);
+			statement.setInt(1, taskID);
+			ResultSet result = statement.executeQuery();
+			result.last();
+			description = result.getString("description");
+			connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return description;
+	}
+
